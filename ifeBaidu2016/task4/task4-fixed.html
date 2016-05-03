@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>task_1_4_1</title>
+    <style type="text/css">
+    *{
+        padding: 0;
+        margin: 0;
+    }
+
+    .cornerTop, .cornerBottom {
+        background-color: #fc0;
+        border-radius: 50px;
+        width: 100px;
+        height: 100px;
+        position: absolute;
+    }
+
+    .cornerTop {
+        top: -50px;
+        left: -50px;
+    }
+
+    .cornerBottom {
+        right: -50px;
+        bottom: -50px;
+    }
+
+    .outer {
+        width: 400px;
+        height: 200px;
+        background-color: #ccc;
+        overflow: hidden;
+        /* fixed定位方法 */
+        position: fixed;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    </style>
+</head>
+<body>
+    <div class="outer">
+        <div class="cornerTop"></div>
+        <div class="cornerBottom"></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>三栏布局——浮动方法</title>
+    <style type="text/css">
+    *{
+        padding: 0;
+        margin: 0;
+    }
+
+    div {
+        border: 1px solid #999;
+    }
+
+    img{
+        width: 80px;
+        height: 80px;
+        padding: 20px;
+        display: block;
+    }
+
+    .info{
+        padding: 20px;
+        margin: 20px;
+        background-color: #eee;
+        overflow: hidden;
+        min-width: 700px;
+        height: 100%;
+    }
+
+    /* 浮动所有 */
+    .name, .about, .member{
+        float: left;
+    }
+    
+    /* 中间内容双重标签，外层边框隐藏，内层为具体内容，设置margin来定位 */
+    .about{
+        border: none;
+        width: 100%;
+        min-width: 300px;
+    }
+    .about p{
+        margin: 0 142px 0 222px;
+        border: 1px solid #999;
+        padding: 20px;
+        min-width: 300px;
+    }
+
+    /* 左边的margin-left为-100%，和中间width宽度一样，这样可以正好定位到左边 */
+    .name{
+        margin-left: -100%;
+        width: 200px;
+    }
+    .name img{
+        float: left;
+    }
+    .name p{
+        padding: 20px;
+    }
+
+    /* 右边的刚好负它自己的宽度就可以了 */
+    .member{
+        margin-left: -122px;
+    }
+
+    </style>
+</head>
+<body>
+    <div class="info">
+        <div class="about">
+            <p>团队介绍团队介绍团队介绍团队介绍团队介绍团队介绍团队介绍团队介绍团队介绍团队介绍团队介绍团队介绍团队介绍团队介绍团队介绍团队介绍团队介绍团队介绍团队介绍团队介绍团队介绍团队介绍团队介绍团队介绍团队介绍团队介绍团队介绍团队介绍团队介绍团队介绍团队介绍团队介绍团队介绍团队介绍团队介绍团队介绍团队介绍团队介绍团队介绍团队介绍团队介绍艾伦·麦席森·图灵（Alan Mathison Turing，1912年6月23日－1954年6月7日），英国数学家、逻辑学家，被称为计算机之父，人工智能之父。1931年图灵进入剑桥大学国王学院，毕业后到美国普林斯顿大学攻读博士学位，二战爆发后回到剑桥，后曾协助军方破解德国的著名密码系统Enigma，帮助盟军取得了二战的胜利。2013年12月24日，在英国司法部长克里斯·格雷灵（Chris Grayling）的要求下，英国女王向图灵颁发了皇家赦免。英国司法部长宣布，“图灵的晚年生活因为其同性取向而被迫蒙上了一层阴影，我们认为当时的判决是不公的，这种歧视现象现在也已经遭到了废除。为此，女王决定为这位伟人送上赦免，以此向其致敬。”图灵对于人工智能的发展有诸多贡献，提出了一种用于判定机器是否具有智能的试验方法，即图灵试验，至今，每年都有试验的比赛。此外，图灵提出的著名的图灵机模型为现代计算机的逻辑工作方式奠定了基础。</p>
+        </div>
+
+        <div class="name">
+            <img src="./呆呆.jpg">
+            <p>团队名称</p>
+        </div>
+
+        <div class="member">
+            <img src="./呆呆.jpg" alt="">
+            <img src="./呆呆.jpg" alt="">
+            <img src="./呆呆.jpg" alt="">
+            <img src="./呆呆.jpg" alt="">
+        </div>
+    </div>
+</body>
+</html>

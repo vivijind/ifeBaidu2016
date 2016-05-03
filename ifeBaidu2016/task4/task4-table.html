@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>task_1_4_1</title>
+    <style type="text/css">
+    *{
+        padding: 0;
+        margin: 0;
+    }
+    /* 注意这里，设置整个页面100% */
+    html,body{
+        width: 100%;
+        height: 100%;
+    }
+
+    .cornerTop, .circleBottom {
+        background-color: #fc0;
+        border-radius: 50px;
+        width: 100px;
+        height: 100px;
+        position: absolute;
+    }
+
+    .cornerTop {
+        top: -50px;
+        left: -50px;
+    }
+
+    .circleBottom {
+        right: -50px;
+        bottom: -50px;
+    }
+
+    /* table居中方法 */
+    .wrap{
+        width: 100%;
+        height:100%;
+        display: table;
+        vertical-align: middle;
+    }
+
+    .content{
+        display: table-cell;
+        vertical-align: middle;
+    }
+    .outer{
+        width: 400px;
+        height: 200px;
+        background: #ccc;
+        overflow: hidden;
+
+        position: relative;
+        margin:0 auto;
+    }
+
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <div class="content">
+            <div class="outer">
+                <div class="cornerTop"></div>
+                <div class="circleBottom"></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
