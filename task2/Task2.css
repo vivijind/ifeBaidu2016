@@ -1,0 +1,213 @@
+/* reset */
+*{
+	margin: 0;
+	padding: 0;
+}
+
+body{
+    font-family:'Microsoft YaHei';
+    background:#dedede;
+}
+
+/* header 导航 */
+header{
+	position: relative;
+	height: 60px;
+	background: #333;
+}
+
+header h1 img{
+	position: absolute;
+	left: 20px;
+	height: 50px;
+}
+
+header ul{
+	position: absolute;
+	right: 10px;
+}
+
+header ul li{
+	text-align: center;
+	width: 80px;
+	display: block;
+	float: left;
+	padding: 20px 10px;
+	list-style: disc;
+}
+
+header ul li a{
+	text-decoration: none;
+	color: white;
+}
+
+header ul li a.checked{
+	color: gray;
+}
+
+header ul li a:hover{
+	color: gray;
+}
+
+/* 文章 */
+article section, aside{
+	width: 90%;
+	margin: 30px auto;
+	padding: 20px;
+	background-color: white;
+	box-shadow:1px 1px 2px 1px #848484;
+	display: block;
+}
+
+article section *{
+    margin: 20px auto 20px 0px;
+    font-size: 16px;
+}
+
+article section h1:before{
+    content:"."; 
+    display:block; 
+    height:0; 
+    visibility:hidden; 
+    clear:both;
+}
+
+article section h1{
+    font-size:20px;
+}
+
+
+article section h2{
+    color:#808080;
+    font-size:16px;
+}
+
+article section .info{
+	color:#808080;
+}
+
+article section .info{
+	color:#808080;
+}
+
+article a{
+    color:blue;
+}
+article a:hover{
+    color:red;
+}
+
+article p{
+    text-indent:2em;
+}
+
+article section ul li{
+	list-style: none;
+	display: block;
+	margin: 0;
+    text-indent:2em;
+}
+
+article section.image ul li{
+	width: 120px;
+	height: 100px;
+	border: 1px solid gray;
+    display: block;
+	margin-left: 40px;
+    margin-top: 10px;
+    font-size: 10px;
+}
+
+article section.image span{
+	text-align: center;
+	margin: 5px auto;
+}
+
+article section.image img{
+    display: block;
+	width: 80%;
+	height: 60%;
+	margin: 5px auto;
+	text-align: center;
+}
+
+article section ol li{
+    margin: 20px 40px;
+}
+
+article section table{
+    margin: 0 auto;
+    width: 95%;
+    border: 1px solid gray;
+    border-spacing:0px;
+}
+
+article section table thead{
+    text-align: left;
+    background-color: black;
+    color: white;
+}
+
+article section table tbody tr:last-child{
+    text-align: left;
+    background-color: gray;
+    color: white;
+    border: 0px solid black;
+}
+
+/*侧栏*/
+aside h1{
+    height:40px;
+    line-height:40px;
+    padding-left:10px;
+    border-left:3px solid #ccc;
+}
+
+aside form div{
+    font-size: 14px;
+    margin:15px auto;
+    display: block;
+}
+
+aside form div legend{
+    float:left;
+    display: block;
+    text-align:right;
+    width:35%;
+    padding-right:15px;
+}
+
+aside form div span{
+    margin-left:35%;
+    padding-left:15px;
+    font-size:12px;
+    color: #aaa;
+}
+aside textarea{
+    width:50%;
+    height:100px;
+}
+aside button{
+    width:100%;
+    height:40px;
+    border-radius: 10px;
+    background: #128fdc;
+    color: white;
+    font-size: 19px;
+    border:none;
+}
+aside button:hover{
+    background: #0063dc;
+
+}
+
+/* 版权 */
+footer{
+    width:100%;
+    height:50px;
+    background:black;
+    color:white;
+    text-align:center;
+    line-height:50px;
+    font-size:14px;
+}
