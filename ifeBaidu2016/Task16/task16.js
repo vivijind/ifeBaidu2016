@@ -98,10 +98,12 @@ function renderAqiList() {
     if (isEmptyObject(aqiData)) {
         return;
     }
-    $("aqi-table").innerHTML = "<tr><td>城市</td><td>空气质量</td><td>操作</td></tr>";
+    // 不要直接对innerHTML+=，这样性能不高
+    var aqiTableValue = "<tr><td>城市</td><td>空气质量</td><td>操作</td></tr>";
     for (city in aqiData) {
-        $("aqi-table").innerHTML += "<tr><td>" + city + "</td><td>" + aqiData[city] + "</td><td><button>删除</button></td></tr>";
+        aqiTableValue += "<tr><td>" + city + "</td><td>" + aqiData[city] + "</td><td><button>删除</button></td></tr>";
     }
+    $("aqi-table").innerHTML = aqiTableValue;
 }
 
 /**
