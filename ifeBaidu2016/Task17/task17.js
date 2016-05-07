@@ -9,6 +9,18 @@ var aqiSourceData = {
 };
 */
 
+var $ = function(id){
+    return document.getElementById(id);
+}
+
+var addEvent = document.addEventListener ?
+    function(elem, type, listener, useCapture) {
+        elem.addEventListener(type, listener, useCapture);
+    } :
+    function(elem, type, listener, useCapture) {
+        elem.attachEvent('on' + type, listener);
+    };
+
 // 以下两个函数用于随机模拟生成测试数据
 function getDateStr(dat) {
   var y = dat.getFullYear();
@@ -72,9 +84,11 @@ function graTimeChange() {
 /**
  * select发生变化时的处理函数
  */
-function citySelectChange() {
+function citySelectChange(selectID) {
   // 确定是否选项发生了变化 
-
+  if (selectID === pageState.nowSelectCity) {
+      return;
+  }
   // 设置对应数据
 
   // 调用图表渲染函数
@@ -84,7 +98,7 @@ function citySelectChange() {
  * 初始化日、周、月的radio事件，当点击时，调用函数graTimeChange
  */
 function initGraTimeForm() {
-
+    addEvent($("form-gra-time"), "click", graTimeChange);
 }
 
 /**
@@ -92,10 +106,32 @@ function initGraTimeForm() {
  */
 function initCitySelector() {
   // 读取aqiSourceData中的城市，然后设置id为city-select的下拉列表中的选项
+  var citySelections = $("city-select");
+  var cityList = "";
+  //<option>北京</option>
+  for(var city in aqiSourceData) {
+    cityList += "<option>" + city + "</option>";
+  }
+  citySelections.innerHTML = cityList;
+
+  var selectID = citySelections.selectedIndex;
 
   // 给select设置事件，当选项发生变化时调用函数citySelectChange
-
+  addEvent(citySelections, 'change', function(selectID){
+    citySelectChange(selectID);
+  });
 }
+
+/**
+ * 判断当前日期是本月第几周
+ * @param  {[Data]} dat [当前日期的data]
+ * @return {[Number]}     [第几周]
+ */
+var getMonthWeek = function (dat) {
+    // 当前周几及第几天
+    var weekday = date.getDay(), day = date.getDate(); 
+    return Math.ceil((day + 6 - weekday) / 7); 
+};
 
 /**
  * 初始化图表需要的数据格式
@@ -103,13 +139,37 @@ function initCitySelector() {
 function initAqiChartData() {
   // 将原始的源数据处理成图表需要的数据格式
   // 处理好的数据存到 chartData 中
+  for(var city in aqiSourceData){
+    var cityData = aqiSourceData[city];
+    var weekData = {},monthData = {},dayData = {};
+    var singleWeek = {};
+
+    for(var item in cityData){
+        var time = item;
+        var value = cityData[item];
+
+        // 处理日数据
+        dayData[time] = value;
+
+        // 获得时间
+        var dat = new Date(time);
+        var week = dat.getDay();    // 周
+        var month = dat.getMonth(); // 月份
+        var days = dat.getDate();   // 日期
+
+        // 处理周数据
+        singleWeek[getMonthWeek(dat)] += value;
+
+    }
+    cityData
+  }
 }
 
 /**
  * 初始化函数
  */
 function init() {
-  initGraTimeForm()
+  initGraTimeForm();
   initCitySelector();
   initAqiChartData();
 }

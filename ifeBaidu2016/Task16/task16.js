@@ -10,7 +10,7 @@
 
 var $ = function(id){
     return document.getElementById(id);
-}
+};
 
 var addEvent = document.addEventListener ?
     function(elem, type, listener, useCapture) {
@@ -35,7 +35,7 @@ var isEmptyObject = function(obj) {
         return false; 
     } 
     return true; 
-} 
+}; 
 
 
 // 学习到的代码——事件代理
@@ -100,7 +100,7 @@ function renderAqiList() {
     }
     // 不要直接对innerHTML+=，这样性能不高
     var aqiTableValue = "<tr><td>城市</td><td>空气质量</td><td>操作</td></tr>";
-    for (city in aqiData) {
+    for (var city in aqiData) {
         aqiTableValue += "<tr><td>" + city + "</td><td>" + aqiData[city] + "</td><td><button>删除</button></td></tr>";
     }
     $("aqi-table").innerHTML = aqiTableValue;
