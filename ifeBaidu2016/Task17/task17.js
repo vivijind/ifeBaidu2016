@@ -63,11 +63,44 @@ var pageState = {
   nowGraTime: "day"
 }
 
+function getRandomColor(){ 
+return "#"+("00000"+((Math.random()*16777215+0.5)>>0).toString(16)).slice(-6); 
+} 
+
 /**
  * 渲染图表
  */
 function renderChart() {
+    // 判断是否有canvs节点，没有创建canvs节点 渲染上下文
+    var myCanvas = document.getElementsByClassName('aqi-chart-wrap')[0].children[0];
+    if (!myCanvas) {
+        myCanvas = document.createElement('canvas');
+        myCanvas.setAttribute('style','margin: 0 auto');
+        document.getElementsByClassName('aqi-chart-wrap')[0].appendChild(myCanvas);
+    }
+    var ctx = myCanvas.getContext('2d');
+    // 设置画布宽高
+    myCanvas.width = 1000;
+    myCanvas.height = 500;
+    // 清除画布
+    ctx.clearRect(0,0,1000,500);
 
+      
+    // 根据数据绘制
+    var city = pageState.nowSelectCity;
+    var time = pageState.nowGraTime;
+    var renderData = chartData[city][time];
+    if (renderData === null) {
+        return;
+    }
+    // 绘制宽度
+    var rectWidth = myCanvas.width/(Object.getOwnPropertyNames(renderData).length);
+    var x = 0;
+    for (var data in renderData) {
+        ctx.fillStyle = getRandomColor();
+        ctx.fillRect(x,500-renderData[data],rectWidth,renderData[data]);
+        x += rectWidth;
+    }
 }
 
 /**
@@ -75,23 +108,29 @@ function renderChart() {
  */
 function graTimeChange() {
   // 确定是否选项发生了变化 
-
+  if (event.target.value === pageState.nowGraTime) {
+      return;
+  }
   // 设置对应数据
+  pageState.nowGraTime = event.target.value;
 
   // 调用图表渲染函数
+  renderChart();
 }
 
 /**
  * select发生变化时的处理函数
  */
-function citySelectChange(selectID) {
+function citySelectChange() {
   // 确定是否选项发生了变化 
-  if (selectID === pageState.nowSelectCity) {
+  if (event.currentTarget.value === pageState.nowSelectCity) {
       return;
   }
   // 设置对应数据
+  pageState.nowSelectCity = event.currentTarget.value;
 
   // 调用图表渲染函数
+  renderChart();
 }
 
 /**
@@ -114,11 +153,11 @@ function initCitySelector() {
   }
   citySelections.innerHTML = cityList;
 
-  var selectID = citySelections.selectedIndex;
+  pageState.nowSelectCity = citySelections.value;
 
   // 给select设置事件，当选项发生变化时调用函数citySelectChange
-  addEvent(citySelections, 'change', function(selectID){
-    citySelectChange(selectID);
+  addEvent(citySelections, 'change', function(){
+    citySelectChange();
   });
 }
 
@@ -129,8 +168,11 @@ function initCitySelector() {
  */
 var getMonthWeek = function (dat) {
     // 当前周几及第几天
-    var weekday = date.getDay(), day = date.getDate(); 
-    return Math.ceil((day + 6 - weekday) / 7); 
+    var weekday = dat.getDay(), day = dat.getDate();
+    if (weekday === 0) {
+        weekday = 7;
+    }
+    return Math.ceil((day + 7 - weekday) / 7); 
 };
 
 /**
@@ -141,8 +183,10 @@ function initAqiChartData() {
   // 处理好的数据存到 chartData 中
   for(var city in aqiSourceData){
     var cityData = aqiSourceData[city];
-    var weekData = {},monthData = {},dayData = {};
-    var singleWeek = {};
+    var weekData = {},dayData = {},monthData = {};
+
+    var weeknow = 1,monthnow = 0,dayWeeknow = 0,dayMonthnow = 0;
+    var weeksum = 0, monthSum = 0;
 
     for(var item in cityData){
         var time = item;
@@ -155,13 +199,52 @@ function initAqiChartData() {
         var dat = new Date(time);
         var week = dat.getDay();    // 周
         var month = dat.getMonth(); // 月份
-        var days = dat.getDate();   // 日期
+        var y = dat.getFullYear();
+
+        if (month !== monthnow) {
+            if (dayWeeknow !== 1) {
+                var weekstr = y + "年" + (monthnow+1) + "月第" + weeknow + "周";
+                weekData[weekstr] = weeksum/dayWeeknow;
+                weeknow = weekNumber;
+                dayWeeknow = 0;
+                weeksum = 0;
+                weeknow = 1;
+            }
+
+            var monthstr = y + "年" + (monthnow+1) + "月";
+            monthData[monthstr] = monthSum/dayMonthnow;
+            monthnow = month;
+            monthSum = 0;
+            dayMonthnow = 0;
+        }
 
         // 处理周数据
-        singleWeek[getMonthWeek(dat)] += value;
+        var weekNumber = getMonthWeek(dat);
 
+        if (weeknow !== weekNumber) {
+            var weekstr = y + "年" + (monthnow+1) + "月第" + weeknow + "周";
+            weekData[weekstr] = weeksum/dayWeeknow;
+            weeknow = weekNumber;
+            dayWeeknow = 0;
+            weeksum = 0;
+        }
+        weeksum += value;
+        monthSum += value;
+        dayWeeknow ++;
+        dayMonthnow ++;
     }
-    cityData
+
+    if (dayMonthnow !== 1) {
+        var monthstr = y + "年" + (monthnow+1) + "月";
+        monthData[monthstr] = monthSum/dayMonthnow;
+        monthnow = month;
+        monthSum = 0;
+        dayMonthnow = 0;
+    }
+    chartData[city] = {day : dayData, month : monthData, week : weekData};
+    dayData = null;
+    monthData = null;
+    weekData = null;
   }
 }
 
