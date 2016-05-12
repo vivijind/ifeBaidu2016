@@ -38,7 +38,7 @@ var isEmptyObject = function(obj) {
 }; 
 
 
-// 学习到的代码——事件代理
+// 学习到的代码——事件代理 事件代理可以不用清楚事件，提高性能
 function delegateEvent(element, tag, eventName, listener) {
             addEvent(element, eventName, function () {
                 var event = arguments[0] || window.event,
