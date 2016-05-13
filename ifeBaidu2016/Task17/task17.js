@@ -71,21 +71,40 @@ return "#"+("00000"+((Math.random()*16777215+0.5)>>0).toString(16)).slice(-6);
  * 渲染图表
  */
 function renderChart() {
-    // 判断是否有canvs节点，没有创建canvs节点 渲染上下文
-    var myCanvas = document.getElementsByClassName('aqi-chart-wrap')[0].children[0];
-    if (!myCanvas) {
-        myCanvas = document.createElement('canvas');
-        myCanvas.setAttribute('style','margin: 0 auto');
-        document.getElementsByClassName('aqi-chart-wrap')[0].appendChild(myCanvas);
-    }
-    var ctx = myCanvas.getContext('2d');
-    // 设置画布宽高
-    myCanvas.width = 1000;
-    myCanvas.height = 500;
-    // 清除画布
-    ctx.clearRect(0,0,1000,500);
+    // canvas方法，没有实现用title属性提示这个柱子的具体日期和数据
+    // // 判断是否有canvs节点，没有创建canvs节点 渲染上下文
+    // var myCanvas = document.getElementsByClassName('aqi-chart-wrap')[0].children[0];
+    // if (!myCanvas) {
+    //     myCanvas = document.createElement('canvas');
+    //     myCanvas.setAttribute('style','margin: 0 auto');
+    //     document.getElementsByClassName('aqi-chart-wrap')[0].appendChild(myCanvas);
+    // }
+    // var ctx = myCanvas.getContext('2d');
+    // // 设置画布宽高
+    // myCanvas.width = 1000;
+    // myCanvas.height = 500;
+    // // 清除画布
+    // ctx.clearRect(0,0,1000,500);
 
       
+    // // 根据数据绘制
+    // var city = pageState.nowSelectCity;
+    // var time = pageState.nowGraTime;
+    // var renderData = chartData[city][time];
+    // if (renderData === null) {
+    //     return;
+    // }
+    // // 绘制宽度
+    // var rectWidth = myCanvas.width/(Object.getOwnPropertyNames(renderData).length);
+    // var x = 0;
+    // for (var data in renderData) {
+    //     ctx.fillStyle = getRandomColor();
+    //     ctx.fillRect(x,500-renderData[data],rectWidth,renderData[data]);
+    //     x += rectWidth;
+    // }
+    
+    var chart = document.getElementsByClassName('aqi-chart-wrap')[0];
+    var fillRect = '';
     // 根据数据绘制
     var city = pageState.nowSelectCity;
     var time = pageState.nowGraTime;
@@ -94,13 +113,14 @@ function renderChart() {
         return;
     }
     // 绘制宽度
-    var rectWidth = myCanvas.width/(Object.getOwnPropertyNames(renderData).length);
+    var rectWidth = 1000/(Object.getOwnPropertyNames(renderData).length);
     var x = 0;
     for (var data in renderData) {
-        ctx.fillStyle = getRandomColor();
-        ctx.fillRect(x,500-renderData[data],rectWidth,renderData[data]);
-        x += rectWidth;
+        var color = getRandomColor();
+        fillRect += '<div title="'+data+":"+renderData[data]+'" style="height:'+renderData[data]+'px; background-color:'+color+'"></div>';
     }
+    
+    chart.innerHTML = fillRect;
 }
 
 /**
