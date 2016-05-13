@@ -112,7 +112,7 @@ function renderChart() {
     if (renderData === null) {
         return;
     }
-    // 绘制宽度
+    // 绘制宽度，创建div
     var rectWidth = 1000/(Object.getOwnPropertyNames(renderData).length);
     var x = 0;
     for (var data in renderData) {
