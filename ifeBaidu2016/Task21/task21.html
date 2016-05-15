@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>task 20</title>
+	<style type="text/css">
+	div *{font: 30px/1em "微软雅黑";}
+	.tagInput {border: 5px solid lightblue;}
+	.textareaInput {width: 400px; height: 200px; margin-top: 20px;}
+	.queue div {color:white; display: inline-block; border: none; border-radius: 10%; min-width: 40px; height: 30px; padding: 5px; margin: 10px 5px; text-align: center;}
+	.tag div {background-color: lightblue;}
+	.hobby div {background-color: yellow;}
+	.queue div:hover {background-color: red;}
+	.confirm {margin: 10px auto; cursor: pointer;}
+	</style>
+</head>
+<body>
+	<div>
+		<span>Tag: </span><input id="tag-container">
+		<div id="tag-queue" class="queue tag">
+			<!-- <div>HTML5</div>
+			<div>JavaScript</div>
+			<div>CSS</div> -->
+		</div>
+		<textarea id="hobby-container" class="textareaInput" placeholder="HTML,CSS、JavaScript，前端"></textarea>
+		<br>
+		<button id='confirm' class="confirm">确认兴趣爱好</button>
+		<div id='hobby-queue' class="queue hobby">
+			<!-- <div>游泳</div>
+			<div>瑜伽</div>
+			<div>摄影</div> -->
+		</div>
+	</div>
+
+	<script type="text/javascript" src="task21.js"></script>
+</body>
+</html>

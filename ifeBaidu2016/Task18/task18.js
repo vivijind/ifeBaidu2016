@@ -10,6 +10,17 @@ var addEvent = document.addEventListener ?
         elem.attachEvent('on' + type, listener);
     };
 
+// 事件代理
+function delegateEvent(element, tag, eventName, listener) {
+    addEvent(element, eventName, function () {
+        var event = arguments[0] || window.event,
+            target = event.target || event.srcElement;
+        if (target && target.tagName === tag.toUpperCase()) {
+            listener.call(target, event);
+        }
+    });
+}
+
 // 获取输入框的值，并验证是否为数字
 function getNumber(number) {
 	number = $('number').value;
@@ -30,10 +41,27 @@ var queue = {
 		this.numbers.push(number);
 	},
 	leftOut: function(number) {
-		this.numbers.shift();
+		alert(this.numbers.shift());
 	},
 	rightOut: function(number) {
-		this.numbers.pop();
+		alert(this.numbers.pop());
+	},
+	deletePos: function(pos) {
+		this.numbers.splice(pos,1);
+	}
+}
+
+// 删除
+function deleteQuenueNumber(event) {
+	var eventList = event.currentTarget.children;
+	var pos = 0;
+	for (var i= 0,tar; tar = eventList[i]; i ++) {
+		if (tar === event.target) {
+			queue.deletePos(pos);
+			renderQueue(queue.numbers);
+			break;
+		}
+		pos ++;
 	}
 }
 
@@ -41,7 +69,7 @@ var queue = {
 function renderQueue() {
 	var str = '';
 	var renderEle = $('queue');
-	for (var i = 0; number=queue.numbers[i]; i++) {
+	for (var i = 0,number; number=queue.numbers[i]; i++) {
 		str += "<div>" + number + "</div>";
 	}
 	renderEle.innerHTML = str;
@@ -63,7 +91,7 @@ function innitialEvent() {
 		}
 	});
 	addEvent(leftOutButton, 'click', function(){
-		queue.leftOut(number);
+		queue.leftOut();
 		renderQueue();
 	});
 	addEvent(rightInButton, 'click', function(){
@@ -74,9 +102,11 @@ function innitialEvent() {
 		}
 	});
 	addEvent(rightOutButton, 'click', function(){
-		queue.rightOut(number);
+		queue.rightOut();
 		renderQueue();
 	});
+
+	delegateEvent($('queue'), 'div', 'click', deleteQuenueNumber);
 }
 
 function init() {
