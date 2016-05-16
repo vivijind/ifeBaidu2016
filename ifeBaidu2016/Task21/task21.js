@@ -109,35 +109,11 @@ Tag.prototype = {
 	},
 	// 绘制
 	_renderQueue: function() {
-		// // 先移除mouse事件
-		// console.log("delete mouse event");
-		// var eleList = this.queue.children;
-		// for(var i=0,ele; ele=eleList[i]; i++) {
-		// 	ele.onmouseover = null;
-		// 	ele.onmouseout = null;
-		// }
-
 		var str = '';
 		for (var i = 0,number; number = this._queue.dataList[i]; i++) {
 			str += "<div>" + number + "</div>";
 		}
 		this.queue.innerHTML = str;
-
-		// // render的时候给所有div增加mouseover和mouseout的事件绑定，这两个事件不适合事件委托，所以需要实时绑定
-		// // 鼠标移动上去显示删除
-		// console.log("add mouse event");
-		// for(var i=0,ele; ele=eleList[i]; i++) {
-		// 	addEvent(ele, 'mouseover', function(event){
-		// 		var str = event.target.innerHTML;
-		// 		str = '点击删除' + str;
-		// 		event.target.innerHTML = str;
-		// 		return;
-		// 	});
-		// 	// 鼠标移开，恢复
-		// 	addEvent(ele, 'mouseout', function(event){
-		// 		event.target.innerHTML.replace("点击删除",'');
-		// 	});
-		// }
 	},
 
 	// 事件绑定
@@ -157,6 +133,21 @@ Tag.prototype = {
 			}
 		});
 
+		// 鼠标事件
+		delegateEvent(this.queue, 'div','mouseover', function(event){
+			if (event.target.children.length === 0) {	//保证是标签的div队列中的元素
+				var str = event.target.innerHTML;
+				str = '点击删除' + str;
+				event.target.innerHTML = str;
+			}
+		});
+		// 鼠标移开，恢复
+		delegateEvent(this.queue, 'div','mouseout', function(event){
+			if (event.target.children.length === 0) {
+				event.target.innerHTML = event.target.innerHTML.replace("点击删除",'');
+			}
+		});
+			
 		var className = this.input.getAttribute('class');
 		// 输入框focus事件，当focus时，给输入框增加class=“tagInput”
 		addEvent(this.input, 'focus', function() {
