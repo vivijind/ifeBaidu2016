@@ -93,6 +93,7 @@ function addAqiData() {
 
 /**
  * 渲染aqi-table表格
+ * 新学习到使用dataset来方便后续的delete，这样不用循环遍历节点
  */
 function renderAqiList() {
     if (isEmptyObject(aqiData)) {
@@ -101,7 +102,7 @@ function renderAqiList() {
     // 不要直接对innerHTML+=，这样性能不高
     var aqiTableValue = "<tr><td>城市</td><td>空气质量</td><td>操作</td></tr>";
     for (var city in aqiData) {
-        aqiTableValue += "<tr><td>" + city + "</td><td>" + aqiData[city] + "</td><td><button>删除</button></td></tr>";
+        aqiTableValue += "<tr><td>" + city + "</td><td>" + aqiData[city] + "</td><td><button data-city='"+city+"'>删除</button></td></tr>";
     }
     $("aqi-table").innerHTML = aqiTableValue;
 }
@@ -121,7 +122,7 @@ function addBtnHandle() {
  */
 function delBtnHandle() {
   // do sth.
-  delete aqiData[this.parentNode.parentNode.firstElementChild.innerHTML];
+  delete aqiData[event.target.dataset.city];
   $("aqi-table").innerHTML = "";
   renderAqiList();
 }

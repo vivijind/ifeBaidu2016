@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Task 22</title>
+    <style type="text/css">
+        .container {
+            margin: 0 auto; 
+            border: none;
+            padding: 50px;}
+        .container div{
+            border: 1px solid black;
+            padding: 20px; 
+            margin: 3px;
+            display: flex; 
+            display: -webkit-flex;
+            align-items:center;
+            flex-shrink: 1;
+            flex-grow: 1;
+        }
+        .operation {text-align: center;}
+        .operation button {
+            width: 100px;
+            height: 40px;
+            border: 2px solid lightblue;
+            margin: 0 20px;
+        }
+        .operation button:hover {
+            background-color: yellow;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="tree" class="container">
+        <div class="root">
+            <div>
+                <div>
+                    <div></div>
+                    <div></div>
+                </div>
+                <div>
+                    <div></div>
+                    <div></div>
+                </div>
+            </div>
+            <div>
+                <div>
+                    <div></div>
+                    <div></div>
+                </div>
+                <div>
+                    <div></div>
+                    <div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="operation">
+        <button id="preorder">前序遍历</button>
+        <button id="inorder">中序遍历</button>
+        <button id="postorder">后序遍历</button>
+    </div>
+
+    <script type="text/javascript" src="task22.js"></script>
+</body>
+</html>
