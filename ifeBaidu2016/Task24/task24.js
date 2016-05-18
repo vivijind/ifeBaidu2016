@@ -21,6 +21,9 @@ function TreeNode(data){
     // tree关联dom结点
     this.domElement = document.createElement('div'); // 访问对应的DOM结点
     this.domElement.innerHTML = this.data;
+    this.domElement.value = this.data;
+    // 对应dom关联到children节点
+    this.domElement.treeNode = this;
 }
 // 树
 function Tree(data) {
@@ -66,6 +69,7 @@ Tree.prototype = {
         })(this._root);
         treeList = queue;
     },
+    // 针对值进行操作查找
     search: function(data,traverse) {
         var result = [];
         traverse.call(this, function(node){
@@ -76,7 +80,7 @@ Tree.prototype = {
         return result;
     },
     /**
-     * 给树增加结点，将data增加到toData结点下
+     * 给树增加结点，将data增加到toData结点下，针对数据值进行添加
      * @param {[Array]} dataList     [子节点data（可以多个）]
      * @param {[string]} toData   [需要添加子节点的父节点data]
      * @param {[function]} traverse [遍历查找父节点方式]
@@ -106,7 +110,7 @@ Tree.prototype = {
         }
     },
     /**
-     * 删除树结点，将fromData下的data均删除
+     * 删除树结点，将fromData下的data均删除，针对数据值进行删除
      * @param {[Array]} dataList     [需要删除的子节点data（可以多个）]
      * @param {[string]} toData   [需要删除子节点的父节点data]
      * @param {[function]} traverse [遍历查找父节点方式]
@@ -151,7 +155,24 @@ Tree.prototype = {
             return index;
         }
     },
-    renderTree: function(callback, search) {    // search表示是否需要搜索提示
+    // 对节点的操作，增加
+    addToNode: function(data, node) {
+        var child = new TreeNode(data),
+        parent = node;
+        parent.child.push(child);
+        child.parent = parent;
+
+        //dom结点添加
+        parent.domElement.appendChild(child.domElement);
+    },
+    // 对节点的操作，删除
+    removeNode: function(node) {
+        var index = node.parent.child.indexOf(node);
+        node.parent.child.splice(index,1);
+        // dom节点删除
+        node.domElement.parentNode.removeChild(node.domElement);
+    },
+    renderTreeAnimation: function(callback, search) {    // search表示是否需要搜索提示
         if (this.rendering) {
             alert('正在遍历啦，别急~');
             return;
@@ -219,6 +240,8 @@ window.onload = function (){
         } 
     }
 
+    var clickNode = null;
+
     addEvent($('traverse-BF'),'click',function(){
         tree.resetRender();
         tree.traverseBF(print);
@@ -260,6 +283,34 @@ window.onload = function (){
         }
 
         tree.renderTree(endRender,1);
+    });
+
+    addEvent($('tree'), 'click', function() {
+        tree.resetRender();
+        clickNode = event.target;
+        clickNode.setAttribute('style',"background-color: red;");
+        $('select-value').innerHTML = clickNode.value;
+    });
+
+    addEvent($('delete'), 'click', function(){
+        if (clickNode) {
+            tree.removeNode(clickNode.treeNode);
+        } else {
+            alert("请先选择要删除的节点");
+        }
+    });
+
+    addEvent($('add'), 'click', function(){
+        if (clickNode) {
+            var data = $('new-node').value;
+            if (data === '') {
+                alert("亲~你真的输入节点值了么？");
+            } else {
+                tree.addToNode(data,clickNode.treeNode);
+            }
+        } else {
+            alert("请先选择要添加子节点的父节点");
+        }
     });
 }
 

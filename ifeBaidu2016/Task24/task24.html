@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Task 22</title>
+    <style type="text/css">
+        .container {
+            margin: 50px auto;
+            font: 20px '微软雅黑';
+            width: 400px;
+        }
+        .search {
+            text-align: center;
+            border-bottom: 2px solid darkblue;
+            line-height: 20px;
+        }
+        .search input {
+            height: 30px;
+        }
+        .tree {
+            border: 1px solid black;
+            margin: 5px auto;
+            border-color: blue;
+            min-width: 400px;
+        }
+        .tree > div{
+            margin: 5px;
+            border: none;
+            display: flex; 
+            display: -webkit-flex;
+            justify-content: flex-start;
+            flex-direction: column;
+            background-color: white;
+        }
+        .tree div:before {
+            float: left;
+            content:'';
+            display:block;
+            width:40px;
+            height:35px;
+            background:url(node.png) no-repeat;
+        }
+        button {
+            width: 200px;
+            height: 40px;
+            border: 2px solid lightblue;
+            margin: 10px 20px;
+        }
+        button:hover {
+            background-color: yellow;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>树形组件Test版本</h1>
+        <div class='search'>
+            请输入要查询的节点：
+            <input id="search-value">
+            <button id="search">查询</button>
+        </div>
+        <div id="tree" class="tree">
+            <div>走在前端的路上
+                <div>
+                    <span>前端技能栈</span>
+                    <div>HTML</div>
+                    <div>CSS</div>
+                    <div>Javascript</div>
+                </div>
+                <div>
+                    <div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                    <div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="task23.js"></script>
+</body>
+</html>
