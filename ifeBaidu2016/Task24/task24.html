@@ -4,41 +4,27 @@
     <meta charset="UTF-8">
     <title>Task 22</title>
     <style type="text/css">
+        * {
+            padding: 0;
+            margin: 0;
+        }
         .container {
-            margin: 50px auto;
-            font: 20px '微软雅黑';
-            width: 400px;
+            position: absolute;
+            left: 50%;
+            transform: translate(-50%);
+        }
+        .container h1{
+            margin: 20px auto;
+            text-align: center;
         }
         .search {
             text-align: center;
-            border-bottom: 2px solid darkblue;
             line-height: 20px;
+            margin: 10px auto;
+            padding: 10px;
         }
         .search input {
             height: 30px;
-        }
-        .tree {
-            border: 1px solid black;
-            margin: 5px auto;
-            border-color: blue;
-            min-width: 400px;
-        }
-        .tree > div{
-            margin: 5px;
-            border: none;
-            display: flex; 
-            display: -webkit-flex;
-            justify-content: flex-start;
-            flex-direction: column;
-            background-color: white;
-        }
-        .tree div:before {
-            float: left;
-            content:'';
-            display:block;
-            width:40px;
-            height:35px;
-            background:url(node.png) no-repeat;
         }
         button {
             width: 200px;
@@ -50,6 +36,61 @@
             background-color: yellow;
             cursor: pointer;
         }
+        .tree {
+            border: 1px solid black;
+            margin: 0px auto;
+            border-color: blue;
+        }
+        .tree ul *{
+            list-style: none;
+            font: 32px/32px '微软雅黑';
+            margin: 5px 40px;
+        }
+        .tree ul li {
+            color: #55aaff;
+            margin: 10px;
+            display: block;
+            vertical-align: top;
+        }
+        .tree ul li:hover {
+            color: blue;
+            cursor: pointer;
+        }
+        .tree ul li.highlight {color: red}
+        .tree ul .show-icon {
+            display:inline-block;
+            width:32px;
+            height:32px;
+            background:url(node.png) no-repeat;
+            margin: 0 0 0 5px;
+        }
+        .tree ul .expand .show-icon{
+            display:inline-block;
+            width:32px;
+            height:32px;
+            background:url(node.png) no-repeat;
+            margin: -5px 5px -5px 0;
+            -moz-transform:rotate(90deg); 
+            -webkit-transform:rotate(90deg);
+            transform:rotate(90deg);
+        }
+        .tree ul .add-icon {
+            display: inline-block;
+            width: 32px;
+            height: 32px;
+            background:url(add.png) no-repeat;
+            margin: 0 5px;
+        }
+        .tree ul .delete-icon {
+            display: inline-block;
+            width: 32px;
+            height: 32px;
+            background:url(delete.png) no-repeat;
+            margin: 0 5px;
+        }
+        .tree ul li i.add-icon.dispear, i.delete-icon.dispear {display: none;}
+        .tree ul li i.show-icon.dispear {visibility: hidden;}
+        .tree ul.dispear {display: none;}
     </style>
 </head>
 <body>
@@ -61,27 +102,23 @@
             <button id="search">查询</button>
         </div>
         <div id="tree" class="tree">
-            <div>走在前端的路上
-                <div>
-                    <span>前端技能栈</span>
-                    <div>HTML</div>
-                    <div>CSS</div>
-                    <div>Javascript</div>
-                </div>
-                <div>
-                    <div>
-                        <div></div>
-                        <div></div>
-                    </div>
-                    <div>
-                        <div></div>
-                        <div></div>
-                    </div>
-                </div>
-            </div>
+<!--             <ul>
+                <li class="expand highlight"><i class="show-icon"></i>走在前端的路上<i class="add-icon"></i>
+                    <ul>
+                        <li class="expand"><i class="show-icon"></i>前端技能栈<i class="add-icon dispear"></i><i class="delete-icon dispear"></i>
+                            <ul class="dispear">
+                                <li class="highlight">HTML<i class="delete-icon"></i></li>
+                                <li>CSS<i class="delete-icon"></i></li>
+                                <li>Javascript<i class="delete-icon"></i></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li><i class="show-icon"></i>走在前端的路上<i class="add-icon dispear"></i></li>
+            </ul> -->
         </div>
     </div>
 
-    <script type="text/javascript" src="task23.js"></script>
+    <script type="text/javascript" src="task24.js"></script>
 </body>
 </html>

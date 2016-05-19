@@ -11,6 +11,7 @@ var addEvent = document.addEventListener ?
         elem.attachEvent('on' + type, listener);
     };
 
+
 // 构建一棵树的类
 // 树节点
 function TreeNode(data){
@@ -18,10 +19,16 @@ function TreeNode(data){
     this.parent = null;
     this.child = [];
 
+    // 节点相关操作
+    this.expand = true;    // 是否展开
+    this.highlight = false; // 是否高亮
+
     // tree关联dom结点
-    this.domElement = document.createElement('div'); // 访问对应的DOM结点
-    this.domElement.innerHTML = this.data;
-    this.domElement.value = this.data;
+    this.domElement = document.createElement('ul'); // 访问对应的DOM结点
+    var str = "<li class=' expand ' data-level='";
+    str += this.level + "'><i class='show-icon'></i>" + this.data + 
+        "<i class='add-icon  dispear '></i><i class='delete-icon  dispear '></i></li>";
+    this.domElement.innerHTML = str;
     // 对应dom关联到children节点
     this.domElement.treeNode = this;
 }
@@ -34,25 +41,16 @@ function Tree(data) {
 Tree.prototype = {
     constructor: Tree,
 
-    // 树的遍历结果存储，用于绘制
-    treeList: [],
-
-    // 绘制标识
-    rendering: false,
-
     traverseDF: function(callback) {
-        treeList = [];
         (function recurse(currentNode) {
             for (var i = 0, node; node = currentNode.child[i]; i ++) {
                 recurse(node);
             }
-            
-            treeList.push(currentNode);
+
             callback(currentNode);
         })(this._root);
     },
     traverseBF: function(callback) {
-        treeList = [];
         var queue = [];
         var listpos = 0;
         queue.push(this._root);
@@ -70,11 +68,14 @@ Tree.prototype = {
         treeList = queue;
     },
     // 针对值进行操作查找
-    search: function(data,traverse) {
+    search: function(data,traverse,callback) {
         var result = [];
         traverse.call(this, function(node){
             if(node.data === data) {
                 result.push(node);
+                if (callback) {
+                    callback(node);
+                }
             }
         });
         return result;
@@ -99,10 +100,11 @@ Tree.prototype = {
         // 添加子节点
         for (var j = 0; j < len; j++) {
             for (var i = 0, nodeData; nodeData = dataList[i]; i ++) {
-                var child = new TreeNode(nodeData),
-                    parent = result[j];
+                var parent = result[j],
+                    child = new TreeNode(nodeData);
                 parent.child.push(child);
                 child.parent = parent;
+                parent.expand = true;
 
                 //dom结点添加
                 parent.domElement.appendChild(child.domElement);
@@ -157,13 +159,13 @@ Tree.prototype = {
     },
     // 对节点的操作，增加
     addToNode: function(data, node) {
-        var child = new TreeNode(data),
-        parent = node;
-        parent.child.push(child);
-        child.parent = parent;
+        var child = new TreeNode(data);
+        node.child.push(child);
+        child.parent = node;
+        node.expand = true;
 
         //dom结点添加
-        parent.domElement.appendChild(child.domElement);
+        node.domElement.appendChild(child.domElement);
     },
     // 对节点的操作，删除
     removeNode: function(node) {
@@ -172,144 +174,131 @@ Tree.prototype = {
         // dom节点删除
         node.domElement.parentNode.removeChild(node.domElement);
     },
-    renderTreeAnimation: function(callback, search) {    // search表示是否需要搜索提示
-        if (this.rendering) {
-            alert('正在遍历啦，别急~');
-            return;
-        }
-        
-        var changePos = 0;
-        var timmer = setInterval(render,500);
-        function render() {
-            this.rendering = true;
-            // color，对应三个值，分别表示：颜色、 0/1 不是需要标志的结点/找到需要标志的结点 、0/1 不中断，中断
-            var color = [];
-            for(var i=0,node; node = treeList[i]; i++) {
-                color = !callback? ['pink',0,0]:callback(node);
-                if (i < changePos) {
-                    node.domElement.setAttribute('style', 'background-color: white;');
+    renderTree: function() {
+        // 深度遍历节点，绘制
+        var str = "";
+        (function recurse(currentNode) {
+            if (!currentNode) {
+                return;
+            }
+            var liNode = currentNode.domElement.children[0];
+            if (currentNode.child.length === 0) {
+                liNode.className = liNode.className.replace(" expand ","");
+                if (currentNode.level !== 0) {
+                    liNode.children[0].className = liNode.children[0].className.replace(" dispear ","");
+                    liNode.children[0].className += " dispear ";
                 }
                 else {
-                    node.domElement.setAttribute('style', 'background-color:' + color[0] + ';');
-                    if (color[2] === 1) {
-                        this.rendering = false;
-                        clearInterval(timmer);
-                        break;
-                    }
-                    if (color[1] === 1) {
-                        treeList.splice(i,1);
-                        break;
-                    }
-                    changePos ++;
-                    break;
-                } 
+                    liNode.children[0].className = liNode.children[0].className.replace(" dispear ","");
+                }
+            } else {
+                liNode.children[0].className = liNode.children[0].className.replace(" dispear ","");
             }
-            if (i === treeList.length) {
-                this.rendering = false;
-                clearInterval(timmer);
-                if (search) {
-                    alert("找不到噢~请重新输入");
+            if (currentNode.expand) {
+                liNode.className = liNode.className.replace(" expand ","");
+                liNode.className += " expand ";
+                for (var j = 1,tempEle; tempEle = currentNode.domElement.children[j]; j++) {
+                    tempEle.setAttribute("class","");
                 }
             }
-        }
+            else {
+                for (var j = 1,tempEle; tempEle = currentNode.domElement.children[j]; j++) {
+                    tempEle.setAttribute("class"," dispear ");
+                }
+                liNode.className = liNode.className.replace(" expand ","");
+            }
+            if (currentNode.highlight) {
+                liNode.className = liNode.className.replace(" highlight ","");
+                liNode.className += " highlight ";
+            } else {
+                liNode.className = liNode.className.replace(" highlight ","");
+            }
+            // 遍历查找其子元素
+            for (var i = 0, node; node = currentNode.child[i]; i ++) {
+                recurse(node);
+            }
+        })(this._root);
     },
-    resetRender: function() {
-        this.traverseDF(function(node) {
-            node.domElement.setAttribute('style', '');
+    resetHighlight: function(){
+        this.traverseBF(function(node){
+            node.highlight = false;
         });
     }
 }
 
 window.onload = function (){
     // 构建树
-    var tree = new Tree('super');
-    tree.add(['cat','Note','fish'],'super',tree.traverseDF);
-    tree.add(['Apple','Phone','study'],'cat',tree.traverseDF);
-    tree.add(['Human','program'],'Note',tree.traverseDF);
-    tree.add(['Iphone','Ipad','Mac','Ipod'],'Apple',tree.traverseDF);
-    tree.add(['book','Note'],'study',tree.traverseDF);
-    tree.add(['man','woman'],'Human',tree.traverseDF);
-    tree.add(['web','c++','java'],'program',tree.traverseDF);
-    tree.add(['HTML','CSS','JavaScript'],'web',tree.traverseDF);
+    var tree = new Tree('走在前端的路上');
+    tree.add(['前端技能栈','听说你要做前端啦'],'走在前端的路上',tree.traverseDF);
+    tree.add(['HTML','CSS','Javascript'],'前端技能栈',tree.traverseDF);
 
     $('tree').appendChild(tree._root.domElement);
 
-    var print = function(node) {
-        if (node) {
-            console.log(node.data);
-        } 
-    }
-
-    var clickNode = null;
-
-    addEvent($('traverse-BF'),'click',function(){
-        tree.resetRender();
-        tree.traverseBF(print);
-        tree.renderTree();
-    });
-
-    addEvent($('traverse-DF'),'click',function(){
-        tree.resetRender();
-        tree.traverseDF(print);
-        tree.renderTree();
-    });
+    tree.renderTree();
 
     addEvent($('search'),'click',function(){
-        tree.resetRender();
+        tree.resetHighlight();
 
-        var data = $('node-data').value,
-            type = $('traverse-Type').value,
-            result = [];
-        if (type === 'traverseBF') {
-            result = tree.search(data,tree.traverseBF);
-        } else {
-            result = tree.search(data,tree.traverseDF);
+        var highlightNode = function(node) {
+            node.highlight = true;
+            var tempNode = node.parent;
+            while(tempNode) {
+                tempNode.expand = true;
+                tempNode = tempNode.parent;
+            } 
         }
+        var data = $('search-value').value,
+            result = tree.search(data,tree.traverseBF,highlightNode);
 
-        var len = result.length;
-
-        var endRender = function(node) {
-            var ele = result[0];
-            if (ele && node.data === ele.data) {
-                result.shift();
-                if (result.length === 0) {
-                    return ['red',1,1];
-                }
-                else {
-                    return ['red',1,0];
-                }
-            }
-            return ['yellow',0,0];
-        }
-
-        tree.renderTree(endRender,1);
+        tree.renderTree();
     });
 
     addEvent($('tree'), 'click', function() {
-        tree.resetRender();
-        clickNode = event.target;
-        clickNode.setAttribute('style',"background-color: red;");
-        $('select-value').innerHTML = clickNode.value;
+        var event = arguments[0] || window.event,
+            target = event.target || event.srcElement;
+        if (target && target.tagName === 'I' && target.className.indexOf("add-icon") !== -1) {
+            var data = prompt("请输入要添加的节点值：");
+            if (data) {
+                tree.addToNode(data, target.parentNode.parentNode.treeNode);
+            }
+            else {
+                alert("没有输入啊亲~");
+            }
+        }
+        if (target && target.tagName === 'I' && target.className.indexOf("delete-icon") !== -1) {
+            tree.removeNode(target.parentNode.parentNode.treeNode);
+        }
+        if (target && target.tagName === 'I' && target.className.indexOf("show-icon") !== -1) {
+            target.parentNode.parentNode.treeNode.expand = !target.parentNode.parentNode.treeNode.expand;
+        }
+        if (target && target.tagName === 'LI') {
+            target.parentNode.treeNode.expand = !target.parentNode.treeNode.expand;
+        }
+
+        tree.renderTree();
     });
 
-    addEvent($('delete'), 'click', function(){
-        if (clickNode) {
-            tree.removeNode(clickNode.treeNode);
-        } else {
-            alert("请先选择要删除的节点");
+    addEvent($('tree'), 'mouseover', function() {
+        var event = arguments[0] || window.event,
+            target = event.target || event.srcElement;
+        if (target && target.tagName === 'LI') {
+            target.children[1].className = target.children[1].className.replace(" dispear ","");
+            if (target.parentNode.treeNode.parent) {    // 对非根节点进行操作
+                target.children[2].className = target.children[2].className.replace(" dispear ","");
+            }
         }
     });
 
-    addEvent($('add'), 'click', function(){
-        if (clickNode) {
-            var data = $('new-node').value;
-            if (data === '') {
-                alert("亲~你真的输入节点值了么？");
-            } else {
-                tree.addToNode(data,clickNode.treeNode);
-            }
-        } else {
-            alert("请先选择要添加子节点的父节点");
+    addEvent($('tree'), 'mouseout', function() {
+        var event = arguments[0] || window.event,
+            target = event.target || event.srcElement;
+        if (target && target.tagName === 'LI') {
+            target.children[1].className = target.children[1].className.replace(" dispear ","");
+            target.children[1].className += " dispear ";
+            if (target.parentNode.treeNode.parent) {    // 对非根节点进行操作
+                target.children[1].className = target.children[1].className.replace(" dispear ","");
+                target.children[2].className += " dispear ";
+            } 
         }
     });
 }
