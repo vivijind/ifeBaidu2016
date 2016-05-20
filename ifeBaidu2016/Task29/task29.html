@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>task 29</title>
+	<style type="text/css">
+		* {
+			padding: 0;
+			margin: 0;
+		}
+		form *{
+			font: 25px/25px "微软雅黑";
+			margin: 50px 10px;
+			vertical-align: middle;
+		}
+		label {
+			font-weight: bold;
+			line-height: 45px;
+			padding-left: 40px;
+		}
+		input {
+			width: 400px;
+			height: 45px;
+			border: 2px solid gray;
+			border-radius: 5px;
+		}
+		button {
+			height: 40px;
+			width: 80px;
+			background-color: #3824E6;
+			color: white;
+			border-radius: 5px;
+			border: 1px solid blue;
+		}
+		form div {
+			font-size: 25px;
+			color: gray;
+			margin-left: 130px;
+			margin-top: -40px;
+		}
+		.input-failed {
+			border-color: red;
+		}
+		.input-success {
+			border-color: green;
+		}
+		.failed {
+			color: red;
+		}
+		.success {
+			color: green;
+		}
+	</style>
+</head>
+<body>
+	<form id="form1">
+		<label for="name">名称</label>
+		<input id="name">
+		<button id="verify">验证</button>
+		<div id="verifyResult">必填，长度为4~16个字符</div>
+	</form>
+
+	<script type="text/javascript">
+		var addEvent = document.addEventListener ?
+	    function(elem, type, listener, useCapture) {
+	        elem.addEventListener(type, listener, useCapture);
+	    } :
+	    function(elem, type, listener, useCapture) {
+	        elem.attachEvent('on' + type, listener);
+	    };
+
+		var GetLength = function(str)
+		{
+		    var realLength = 0;
+		    for (var i = 0; i < str.length; i++)
+		    {
+		        charCode = str.charCodeAt(i);
+		        if (charCode >= 0 && charCode <= 128)
+		        realLength += 1;
+		        else
+		        realLength += 2;
+		    }
+		    return realLength;
+		};
+
+		var verifyText = function(str) {
+			if (!str) {
+				return [0,"必填项，名字不能为空"];
+			}
+			var len = GetLength(str);
+			// 字符数为4-16位
+			if (len < 4 || len > 16) {
+				return [-1,"字符数为4-16位"];
+			}
+			return [1,"名字格式正确"];
+		}
+
+		var strNormal = "必填，长度为4~16个字符";
+		var verifyButton = document.getElementById("verify");
+		var verifyInput = document.getElementById("name");
+		var verifyResult = document.getElementById("verifyResult");
+		var formInput = document.getElementById("form1");
+
+		addEvent(verifyButton, 'click', function() {
+			var str = verifyInput.value;
+			var result = verifyText(str);
+			verifyResult.innerHTML = result[1];
+			if (result[0]>0) {
+				verifyResult.setAttribute("class", "success");
+				verifyInput.setAttribute("class", "input-success");
+			} else {
+				verifyResult.setAttribute("class", "failed");
+				verifyInput.setAttribute("class", "input-failed");
+			}
+		});
+
+		addEvent(verifyInput, 'focus', function() {
+			verifyResult.innerHTML = strNormal;
+			verifyResult.removeAttribute("class");
+			verifyInput.removeAttribute("class");
+		});
+
+		addEvent(formInput, "submit", function(){
+			event.preventDefault();
+		});
+
+	</script>
+</body>
+</html>
