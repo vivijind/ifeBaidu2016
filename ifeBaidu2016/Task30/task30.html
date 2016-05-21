@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>task 29</title>
+	<style type="text/css">
+		* {
+			padding: 0;
+			margin: 0;
+		}
+		form {
+			overflow: hidden;
+			width: 80%;
+		}
+		form *{
+			font: 25px/25px "微软雅黑";
+			margin: 10px 10px;
+		}
+		form label {
+			display: inline-block;
+			font-weight: bold;
+			line-height: 45px;
+			width: 20%;
+			text-align: right;
+		}
+		form input {
+			width: 70%;
+			height: 45px;
+			border: 2px solid gray;
+			border-radius: 5px;
+		}
+		form button {
+			height: 40px;
+			width: 15%;
+			background-color: #3824E6;
+			color: white;
+			border-radius: 5px;
+			border: none;
+			float: right;
+			margin-right: 5%;
+		}
+		form button:hover {
+			background-color: #3eccee;
+			cursor: pointer;
+		}
+		form div {
+			font-size: 25px;
+			color: gray;
+			margin-left: 25%;
+		}
+		.input-focus {
+			border-color: #3eccee;
+			box-shadow: 1px 1px 1px rgba(120,23,220,0.5);
+		}
+		.input-failed {
+			border-color: red;
+			box-shadow: 1px 1px 1px rgba(120,23,220,0.5);
+		}
+		.input-success {
+			border-color: lightgreen;
+			box-shadow: 1px 1px 1px rgba(120,23,220,0.5);
+		}
+		.failed {
+			color: red;
+		}
+		.success {
+			color: green;
+		}
+	</style>
+</head>
+<body>
+	<form id="form1">
+		<label for="name">名称</label>
+		<input id="name">
+		<div id="verifyName"></div>
+
+		<label for="password1">密码</label>
+		<input id="password1" type="password">
+		<div id="verifyPassword1"></div>
+
+		<label for="password2">密码确认</label>
+		<input id="password2" type="password">
+		<div id="verifyPassword2"></div>
+
+		<label for="mail">邮箱</label>
+		<input id="mail" type="email">
+		<div id="verifyMail"></div>
+
+		<label for="telphone">手机</label>
+		<input id="telphone" type="tel">
+		<div id="verifyTel"></div>
+		
+		<button id="verify">验证</button>
+	</form>
+
+	<script type="text/javascript">
+		// 验证数据string
+		var verifyString = {
+			default: ["必填，长度为4~16个字符","必填，长度为4~16个英文或者数字","再次输入相同密码","必填，输入正确的邮箱地址","必填，11位手机号码"],
+			error: ["输入错误，长度为4~16个字符","请输入长度为4~16个英文或者数字","密码输入不一致","邮箱格式错误","请输入正确的11位手机号码"],
+			success: ["名称可用", "密码可用", "密码输入一致", "邮箱输入正确", "手机格式正确"],
+			empty: ["名称不能为空", "密码不能为空", "请再次输入相同密码", "请输入邮箱地址", "手机不能为空"]
+		}
+		var inputclassName = {
+			default: "input-focus",
+			error: "input-failed",
+			success: "input-success"
+		}
+		var verifyclassName = {
+			default: "",
+			error: "failed",
+			success: "success"
+		}
+
+		var addEvent = document.addEventListener ?
+	    function(elem, type, listener, useCapture) {
+	        elem.addEventListener(type, listener, useCapture);
+	    } :
+	    function(elem, type, listener, useCapture) {
+	        elem.attachEvent('on' + type, listener);
+	    };
+
+		var GetLength = function(str)
+		{
+		    var realLength = 0;
+		    for (var i = 0; i < str.length; i++)
+		    {
+		        charCode = str.charCodeAt(i);
+		        if (charCode >= 0 && charCode <= 128)
+		        realLength += 1;
+		        else
+		        realLength += 2;
+		    }
+		    return realLength;
+		};
+
+		var verifyName = function(str) {
+			if (!str) {
+				return "empty";
+			}
+			var len = GetLength(str);
+			// 字符数为4-16位
+			if (len < 4 || len > 16) {
+				return "error";
+			}
+			return "success";
+		}
+		var verifyPassword1 = function(str) {
+			if (!str) {
+				return "empty";
+			}
+			// 4-16位中英文字符
+			var reg = /\w{4,16}/g;
+			
+			if (!reg.test(str)) {
+				return "error";
+			}
+			return "success";
+		}
+		var verifyPassword2 = function(str1,str2) {
+			if (!str2) {
+				return "empty";
+			}
+			if (str1 !== str2) {
+				return "error";
+			}
+			return "success";
+		}
+		var verifyMail = function(str) {
+			if (!str) {
+				return "empty";
+			}
+			// 4-16位中英文字符
+			var reg = /^0?[\w]+@[\w]+\.[\w]+$/g;
+			
+			if (!reg.test(str)) {
+				return "error";
+			}
+			return "success";
+		}
+		var verifyTel = function(str) {
+			if (!str) {
+				return "empty";
+			}
+			// 4-16位中英文字符
+			var reg = /^0?(13[0-9]|15[0-9]|18[0-9]|14[0-9])[0-9]{8}$/g;
+			
+			if (!reg.test(str)) {
+				return "error";
+			}
+			return "success";
+		}
+
+		var verifyButton = document.getElementById("verify");
+		var inputList = document.getElementsByTagName('input');
+		var verifyList = document.getElementsByTagName('div');
+		var formInput = document.getElementById("form1");
+		var resultList = [];
+
+		var verfifyInput = function(i) {
+			var str = inputList[i].value;
+			var result = "default";
+			switch(i) {
+				case 0:
+					result = verifyName(str);
+					break;
+				case 1:
+					passwordstr = str;
+					result = verifyPassword1(str);
+					break;
+				case 2:
+					result = verifyPassword2(inputList[i-1].value,str);
+					break;
+				case 3:
+					result = verifyMail(str);
+					break;
+				case 4:
+					result = verifyTel(str);
+					break;
+				default:
+					break;
+			}
+			verifyList[i].innerHTML = verifyString[result][i];
+			if (result === "empty") {
+				result = "error";
+			}
+			inputList[i].setAttribute("class",inputclassName[result]);
+			verifyList[i].setAttribute("class",verifyclassName[result]);
+			if (result !== "success") {
+				resultList.push(verifyString[result][i]);
+			}
+		}
+
+		// 添加事件处理
+		for (var i = 0; i < inputList.length; i++) {
+			var focushelper = function(i) {
+				return function(){
+					inputList[i].setAttribute("class",inputclassName.default);
+					verifyList[i].innerHTML = verifyString.default[i];
+					verifyList[i].setAttribute("class",verifyclassName.default);
+				}
+			}
+			var blurhelper = function(i) {
+				return function() {
+					resultList = [];
+					verfifyInput(i);
+				}
+			}
+			addEvent(inputList[i], 'focus', focushelper(i));
+
+			addEvent(inputList[i], 'blur', blurhelper(i));
+		}
+			
+		addEvent(verifyButton, 'click', function() {
+			resultList = [];
+			for (var i = 0; i < inputList.length; i++) {
+				verfifyInput(i);
+			}
+		});
+
+		addEvent(formInput, "submit", function(){
+			var len = resultList.length;
+			if (len != 0) {
+				event.preventDefault();
+				var msg = '';
+				for (var i = 0; i < len; i++) {
+					msg += "error " + i + ": " + resultList[i] + "\n";
+				}
+				alert(msg);
+			}
+		});
+
+		
+		
+
+	</script>
+</body>
+</html>
