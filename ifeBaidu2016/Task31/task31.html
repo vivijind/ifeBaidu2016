@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>task 31</title>
+	<style type="text/css">
+		html,body{
+			padding: 0;
+			margin: 0;
+		}
+		form {
+			position: relative;
+			vertical-align: center;
+			text-align: center;
+			top: 0;
+			left: 0;
+		}
+		.id {
+			margin-top: 50px;
+		}
+		label {
+			margin-right: 40px;
+			font-size: 24px/24px "宋体";
+		}
+		.information {
+			margin-top: 30px;
+		}
+		.information label {
+			margin-right: 0px;
+		}
+		.select1, .select2 {
+			border: 1px solid gray;
+			border-radius: 2px;
+			height: 30px;
+			margin-left: 20px;
+		}
+		.select1 {
+			width: 100px;
+		}
+		.select2 {
+			width: 200px;
+		}
+		.company input {
+			width: 300px;
+			height: 30px;
+			border: 1px solid gray;
+			border-radius: 2px;
+		}
+		.dispear {
+			display: none;
+		}
+	</style>
+</head>
+<body>
+	<form id="form1">
+		<div>
+        	<input class="id" type="radio" name="identity" id="id_student" value="zaixiaosheng" checked><label for="id_student" >在校生</label>
+        	<input class="id" type="radio" name="identity" id="id_social" value="feizaixiaosheng"><label for="id_social" >非在校生</label>
+      	</div>
+      	<div class="information" id="information">
+      		<div class="school">
+      			<label for="school">学校</label>
+      			<select class="select1" name="location" id="school">
+      				<option>北京</option>
+      			</select>
+		      	<select class="select2" name="university">
+		        	<option>北京大学</option>
+		      	</select>
+      		</div>
+      		<div class="company dispear ">
+      			<label for="company">就业单位</label>
+      			<input id="company">
+      		</div>
+      	</div>
+	</form>
+
+	<script type="text/javascript">
+		// 数据
+		// 数据定义
+        var locations = [ 
+            {text:'北京',value:'beijing'}, 
+            {text:'武汉',value:'wuhan'} 
+        ]; 
+        var university = { 
+            beijing:[ 
+                {text:'北京大学',value:'THU'}, 
+                {text:'清华大学',value:'PKU'}
+            ], 
+            wuhan:[ 
+                {text:'武汉大学',value:'WHU'}, 
+                {text:'中国地质大学',value:'CUG'}
+            ] 
+        };
+
+        // 数据节点
+        var infoInput = document.getElementById("information").children;
+        var radioList = document.querySelectorAll(".id");
+		// 验证选择的类型
+		var informationInput = function(value) {
+			if (value === "zaixiaosheng") {
+				infoInput[0].className = infoInput[0].className.replace(" dispear ","");
+				infoInput[1].className += " dispear ";
+			} 
+			else if (value === "feizaixiaosheng") {
+				infoInput[1].className = infoInput[1].className.replace(" dispear ","");
+				infoInput[0].className += " dispear ";
+			}
+		}
+
+		for (var i = 0; i < radioList.length; i++) {
+			radioList[i].addEventListener('change', function() {
+				var target = event.target || event.srcElement;
+				informationInput(target.value);
+			});
+		}
+
+
+		// 级联菜单
+		var selectList = document.querySelectorAll("select");
+        // 填充选择器
+        function fillSelect(select,list){ 
+            for(var i=select.length-1;i>0;i--){ 
+                select.remove(i); 
+            }
+            for(var i=0,l=list.length,data;i<l;i++){
+                data = list[i];
+                var option = new Option(
+                    data.text,data.value
+                ); 
+                select.add(option); 
+            }
+        }
+        // 切换章目录
+        selectList[0].addEventListener('change',function(event){
+                var value =  selectList[0].value, 
+                    list = university[value]||[]; 
+                fillSelect(selectList[1],list); 
+            }
+        );
+        fillSelect(selectList[0],locations); 
+
+	</script>
+</body>
+</html>
