@@ -190,18 +190,17 @@ var emitter = {
 		// 拖拽初始化
 		_initDrag: function() {
 			this._dragInfo = {};
-			this._dragInfo.translatex = 0;
-			this._dragInfo.translatey = 0;
+
 			// 移动
 			this.head.addEventListener("mousedown", this._dragstart.bind(this));
 		    this.head.addEventListener("mousemove", this._dragmove.bind(this));
 		    this.head.addEventListener("mouseup", this._dragend.bind(this));
       		this.head.addEventListener("mouseleave", this._dragend.bind(this));
       		// 拖拽放大缩小
-      		this.wrap.addEventListener("mousedown", this._dragstart.bind(this));
-		    this.wrap.addEventListener("mousemove", this._dragmove.bind(this));
-		    this.wrap.addEventListener("mouseup", this._dragend.bind(this));
-      		this.wrap.addEventListener("mouseleave", this._dragend.bind(this));
+      // 		this.wrap.addEventListener("mousedown", this._dragstart.bind(this));
+		    // this.wrap.addEventListener("mousemove", this._dragmove.bind(this));
+		    // this.wrap.addEventListener("mouseup", this._dragend.bind(this));
+      // 		this.wrap.addEventListener("mouseleave", this._dragend.bind(this));
 		},
 
 		// 开始移动或者拖拽，记录初始坐标
@@ -220,7 +219,7 @@ var emitter = {
 		// 移动、拖拽
 		_dragmove: function(ev) {
 			var dragInfo = this._dragInfo;
-			if (!dragInfo) {
+			if (!dragInfo.start) {
 				return;
 			}
 
@@ -237,43 +236,41 @@ var emitter = {
 		      	window.document.selection.empty();
 		    }
 
-		    // if (dragInfo.zoom) {
-		    	
-		    // } else {
-		    	this._calMove(ev.target);
-		    // }
+		    var translatex = parseInt(dragInfo.end.x - dragInfo.start.x);
+			var translatey = parseInt(dragInfo.end.y - dragInfo.start.y);
+
+			if (translatex === 0 || translatey === 0) {
+				return;
+			} else {
+				this._calMove(translatex,translatey);
+			}
+		    
 			
 		},
 
 		_dragend: function(ev) {
 			var dragInfo = this._dragInfo;
-		    if(!dragInfo.start) return;
+		    if(!dragInfo) return;
 
 		    ev.preventDefault();
-		    this._dragInfo.start = null;
-		    this._dragInfo.end = null;
+
+		    // 保存上一次移动的最后为位置
+		    // 需要再数据放开的时候获取，如果在move过程中获取，每次需要读取和赋值，导致拖拽很慢，效率低
+		    // 最后获取暂时根据transform写死了，还没想到更好的方法
+		   	var tempList = this.wrap.style.transform.split(/\(|(px)/);
+		   	var tx = parseInt(tempList[2]);
+		    var ty = parseInt(tempList[6]);
+			this.finalEnd = {x: tx?tx:0, y: ty?ty:0};
+		    
+		    this._dragInfo = {};		    
 		},
 
 		// 移动
-		_calMove: function() {
-			var dragInfo = this._dragInfo;
-      		if(!dragInfo.start) return;
-
-			var wrapPos = this.wrap.getBoundingClientRect();
-			var translatex = dragInfo.translatex;
-			var translatey = dragInfo.translatey;
-
-			translatex += parseInt(dragInfo.end.x - dragInfo.start.x);
-			translatey += parseInt(dragInfo.end.y - dragInfo.start.y);
-
-			if (translatex === 0 || translatey === 0) {
-				return;
-			}
+		_calMove: function(translatex, translatey) {
+			translatex += (this.finalEnd?this.finalEnd.x:0);
+			translatey += (this.finalEnd?this.finalEnd.y:0);
 			
-			var str = "translateX(" + translatex + "px) translateY(" + translatey + "px) translateZ(0px)";
-			this.wrap.style.transform = str;
-			dragInfo.translatex = translatex;
-			dragInfo.translatey = translatey;
+			this.wrap.style.transform = "translateX(" + translatex + "px) translateY(" + translatey + "px) translateZ(0px)";
 		}
 
 	});
