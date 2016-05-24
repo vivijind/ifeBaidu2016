@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>modal组件实践</title>
+    <link rel="stylesheet" href="animate.css">
+    <link rel="stylesheet" href="modal.css">
+    <style type="text/css">
+        .modal-trigger{
+            display: block;
+            width: 120px;
+            height: 32px;
+            font-size: 16px;
+            margin: 60px auto;
+          }
+    </style>
+</head>
+<body>
+    <button class="modal-trigger">弹窗</button>
+<!--     <div class="m-modal">
+        <div class="modal_mask"><div>
+        <div class="modal_wrap">
+            <h3 class="modal_head">标题</h3>
+            <div class="modal_body">内容</div>
+            <div class="modal_foot">
+                <a class="confirm" href="#">确认</a>
+                <a class="cancel" href="#">取消</a>
+            </div>
+        </div>
+    </div> -->
+    <script type="text/javascript" src="modal.js"></script>
+    <script type="text/javascript" src="animate.js"></script>
+    <script type="text/javascript">
+        /*
+        流程：
+分析：交互意图以及需求
+结构：html+css实现静态结构，先构建出原型，来帮助我们梳理后期的js结构
+接口：定义公共接口，设计另一种调用方式和使用方式
+实现：从抽象到细节，实现功能接口、暴露事件
+完善：遍历接口、插件封装、重构等。
+         */
+        // 定义公共接口
+        var modal = new Modal({
+            // 1.内容配置
+            content: "内容",
+            // 2.动画设置
+            animation: {
+                enter: 'fadeIn',
+                leave: 'fadeOut'
+            },
+            
+            // 移动及拖拽
+            drag: true
+        });
+
+        // 注册事件
+        modal.on("confirm", function(){
+            console.log("confirm");
+        });
+        modal.on("cancel", function(){
+            console.log("cancel");
+        });
+
+        // 两个接口
+        // modal.show(/*可传入content*/);
+        // modal.hide();
+
+        // 调用方式
+        document.querySelector('.modal-trigger').addEventListener('click', function(){
+            modal.show("<h3>弹窗</h3"); 
+        });
+    </script>
+</body>
+</html>
