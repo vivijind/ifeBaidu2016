@@ -25,6 +25,8 @@
     box-shadow: 1px 1px 1px rgba(0,0,255,0.5);
     background-color: white;
     border-radius: 5px;
+    min-width: 15em;
+    min-height: 6em;
 }
 .m-modal .modal_head, .modal_body{
     min-width: 15em;
@@ -35,7 +37,7 @@
     color: white;
 }
 .m-modal .modal_body {
-    min-height: 4em;
+    min-height: 80%;
     line-height: 4em;
 }
 .m-modal .modal_foot .confirm,.cancel {

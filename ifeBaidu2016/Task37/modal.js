@@ -197,10 +197,10 @@ var emitter = {
 		    this.head.addEventListener("mouseup", this._dragend.bind(this));
       		this.head.addEventListener("mouseleave", this._dragend.bind(this));
       		// 拖拽放大缩小
-      // 		this.wrap.addEventListener("mousedown", this._dragstart.bind(this));
-		    // this.wrap.addEventListener("mousemove", this._dragmove.bind(this));
-		    // this.wrap.addEventListener("mouseup", this._dragend.bind(this));
-      // 		this.wrap.addEventListener("mouseleave", this._dragend.bind(this));
+      		this.wrap.addEventListener("mousedown", this._dragstart.bind(this));
+		    this.wrap.addEventListener("mousemove", this._dragmove.bind(this));
+		    this.wrap.addEventListener("mouseup", this._dragend.bind(this));
+      		this.wrap.addEventListener("mouseleave", this._dragend.bind(this));
 		},
 
 		// 开始移动或者拖拽，记录初始坐标
@@ -210,42 +210,52 @@ var emitter = {
 			dragInfo.zoom = false;
 
 			// 判断是否为拖拽放大缩小，即判断鼠标是否在边框右下角
-			var wrapPos = ev.target.getBoundingClientRect();
-			if (dragInfo.start.x === wrapPos.right && dragInfo.start.y === wrapPos.bottom) {
-				dragInfo.zoom = true;
-			}
+			// var wrapPos = ev.target.getBoundingClientRect();
+			// if (dragInfo.start.x === wrapPos.right && dragInfo.start.y === wrapPos.bottom) {
+			// 	dragInfo.zoom = true;
+			// 	this.wrap.style.cursor = "se-resize";
+			// }
 		},
 
 		// 移动、拖拽
 		_dragmove: function(ev) {
 			var dragInfo = this._dragInfo;
+			var wrapPos = ev.target.getBoundingClientRect();
+			if (Math.abs(ev.pageX - wrapPos.right)<5 && Math.abs(ev.pageY - wrapPos.bottom)<5) {
+				dragInfo.zoom = true;
+				this.wrap.style.cursor = "se-resize";
+			}
 			if (!dragInfo.start) {
 				return;
-			}
+			}		
 
-			// 默认，及选取清除
+			// 默认，及选区清除
 		    ev.preventDefault();
 
 		    dragInfo.end = {x: ev.pageX, y: ev.pageY};
 
-		    var start = dragInfo.start;
-		    // 清除恼人的选区
-		    if (window.getSelection) {
-		      	window.getSelection().removeAllRanges();
-		    } else if (window.document.selection) {
-		      	window.document.selection.empty();
+		    if (dragInfo.zoom) {
+		    	var wrapPos = this.wrap.getBoundingClientRect();
+		    	this.wrap.style.width = parseInt(dragInfo.end.x - wrapPos.left) + "px";
+		    	this.wrap.style.height = parseInt(dragInfo.end.y - wrapPos.top) + "px";
+		    } else {
+		  //   	var start = dragInfo.start;
+			 //    // 清除恼人的选区
+			 //    if (window.getSelection) {
+			 //      	window.getSelection().removeAllRanges();
+			 //    } else if (window.document.selection) {
+			 //      	window.document.selection.empty();
+			 //    }
+
+			 //    var translatex = parseInt(dragInfo.end.x - dragInfo.start.x);
+				// var translatey = parseInt(dragInfo.end.y - dragInfo.start.y);
+
+				// if (translatex === 0 || translatey === 0) {
+				// 	return;
+				// } else {
+				// 	this._calMove(translatex,translatey);
+				// }
 		    }
-
-		    var translatex = parseInt(dragInfo.end.x - dragInfo.start.x);
-			var translatey = parseInt(dragInfo.end.y - dragInfo.start.y);
-
-			if (translatex === 0 || translatey === 0) {
-				return;
-			} else {
-				this._calMove(translatex,translatey);
-			}
-		    
-			
 		},
 
 		_dragend: function(ev) {
