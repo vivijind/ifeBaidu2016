@@ -193,14 +193,14 @@ var emitter = {
 
 			// 移动
 			this.head.addEventListener("mousedown", this._dragstart.bind(this));
-		    this.head.addEventListener("mousemove", this._dragmove.bind(this));
 		    this.head.addEventListener("mouseup", this._dragend.bind(this));
       		this.head.addEventListener("mouseleave", this._dragend.bind(this));
       		// 拖拽放大缩小
       		this.wrap.addEventListener("mousedown", this._dragstart.bind(this));
-		    this.wrap.addEventListener("mousemove", this._dragmove.bind(this));
-		    this.wrap.addEventListener("mouseup", this._dragend.bind(this));
-      		this.wrap.addEventListener("mouseleave", this._dragend.bind(this));
+		    document.addEventListener("mouseup", this._dragend.bind(this));
+
+      		document.addEventListener("mousemove", this._dragmove.bind(this));
+      		document.addEventListener("mouseleave", this._dragend.bind(this));
 		},
 
 		// 开始移动或者拖拽，记录初始坐标
@@ -210,19 +210,20 @@ var emitter = {
 			dragInfo.zoom = false;
 
 			// 判断是否为拖拽放大缩小，即判断鼠标是否在边框右下角
-			// var wrapPos = ev.target.getBoundingClientRect();
-			// if (dragInfo.start.x === wrapPos.right && dragInfo.start.y === wrapPos.bottom) {
-			// 	dragInfo.zoom = true;
-			// 	this.wrap.style.cursor = "se-resize";
-			// }
+			var wrapPos = ev.target.getBoundingClientRect();
+			
+			dragInfo.posix = {x: wrapPos.width, y: wrapPos.height};
+			if (Math.abs(ev.pageX - wrapPos.right)<20 && Math.abs(ev.pageY - wrapPos.bottom)<20) {
+				dragInfo.zoom = true;
+				console.log("start");
+			}
 		},
 
 		// 移动、拖拽
 		_dragmove: function(ev) {
 			var dragInfo = this._dragInfo;
 			var wrapPos = ev.target.getBoundingClientRect();
-			if (Math.abs(ev.pageX - wrapPos.right)<5 && Math.abs(ev.pageY - wrapPos.bottom)<5) {
-				dragInfo.zoom = true;
+			if (Math.abs(ev.pageX - wrapPos.right)<20 && Math.abs(ev.pageY - wrapPos.bottom)<20) {
 				this.wrap.style.cursor = "se-resize";
 			}
 			if (!dragInfo.start) {
@@ -231,30 +232,38 @@ var emitter = {
 
 			// 默认，及选区清除
 		    ev.preventDefault();
+	       // 清除恼人的选区
+		    if (window.getSelection) {
+		      	window.getSelection().removeAllRanges();
+		    } else if (window.document.selection) {
+		      	window.document.selection.empty();
+		    }
 
 		    dragInfo.end = {x: ev.pageX, y: ev.pageY};
 
 		    if (dragInfo.zoom) {
-		    	var wrapPos = this.wrap.getBoundingClientRect();
-		    	this.wrap.style.width = parseInt(dragInfo.end.x - wrapPos.left) + "px";
-		    	this.wrap.style.height = parseInt(dragInfo.end.y - wrapPos.top) + "px";
+		    	// var wrapPos = this.wrap.getBoundingClientRect();
+		    	this.wrap.style.width = parseInt(dragInfo.end.x - dragInfo.start.x + dragInfo.posix.x) + "px";
+		    	this.wrap.style.height = parseInt(dragInfo.end.y - dragInfo.start.y + dragInfo.posix.y) + "px";
+		    	console.log("1  " + this.wrap.style.width);
+		    	console.log("1  " + this.wrap.style.height);
 		    } else {
-		  //   	var start = dragInfo.start;
-			 //    // 清除恼人的选区
-			 //    if (window.getSelection) {
-			 //      	window.getSelection().removeAllRanges();
-			 //    } else if (window.document.selection) {
-			 //      	window.document.selection.empty();
-			 //    }
+		    	var start = dragInfo.start;
+			    // 清除恼人的选区
+			    if (window.getSelection) {
+			      	window.getSelection().removeAllRanges();
+			    } else if (window.document.selection) {
+			      	window.document.selection.empty();
+			    }
 
-			 //    var translatex = parseInt(dragInfo.end.x - dragInfo.start.x);
-				// var translatey = parseInt(dragInfo.end.y - dragInfo.start.y);
+			    var translatex = parseInt(dragInfo.end.x - dragInfo.start.x);
+				var translatey = parseInt(dragInfo.end.y - dragInfo.start.y);
 
-				// if (translatex === 0 || translatey === 0) {
-				// 	return;
-				// } else {
-				// 	this._calMove(translatex,translatey);
-				// }
+				if (translatex === 0 || translatey === 0) {
+					return;
+				} else {
+					this._calMove(translatex,translatey);
+				}
 		    }
 		},
 
@@ -272,7 +281,9 @@ var emitter = {
 		    var ty = parseInt(tempList[6]);
 			this.finalEnd = {x: tx?tx:0, y: ty?ty:0};
 		    
-		    this._dragInfo = {};		    
+		    this._dragInfo = {};
+		    this.wrap.style.cursor = "auto";
+		    console.log("end");		    
 		},
 
 		// 移动

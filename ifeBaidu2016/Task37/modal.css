@@ -1,11 +1,10 @@
 * {
-	padding:0;
-	margin:0;
+    padding:0;
+    margin:0;
 }
 .m-modal *{
     font: 20px/30px "微软雅黑";
     color: gray;
-    min-height: 1.5em;
 }
 .m-modal .modal_mask {
     position: fixed;
@@ -27,30 +26,45 @@
     border-radius: 5px;
     min-width: 15em;
     min-height: 6em;
+    position: relative;
 }
 .m-modal .modal_head, .modal_body{
-    min-width: 15em;
+    width: 100%;
     padding-left: 1em;
+    box-sizing: border-box;
 }
 .m-modal .modal_head {
+    position: absolute;
+    top: 0;
     background-color: #3498db;
     color: white;
+    height: 1.5em;
+    line-height: 1.5em;
 }
 .m-modal .modal_body {
-    min-height: 80%;
-    line-height: 4em;
+    position: absolute;
+    top: 30%;
+    line-height: 50%;
+}
+.m-modal .modal_foot {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
 }
 .m-modal .modal_foot .confirm,.cancel {
     display: inline-block;
+    height: 20%;
     width: 50%;
     text-align: center;
     text-decoration: none;
     box-sizing: border-box;
     border-top: 1px solid gray;
 }
-.m-modal .modal_foot a:hover {
-    color: #3498db;
+
+.m-modal .modal_head:hover {
+    cursor: move;
 }
+
 .m-modal .modal_foot a:hover{
     background-color:#71b7e6;
     color:#fff;
