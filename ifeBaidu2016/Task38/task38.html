@@ -3,25 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <title>UI组件之排序表格</title>
+    <style type="text/css">
+        html,body {
+            margin: 0;
+            padding: 0;
+        }
+        table{border-collapse:collapse;border-spacing:0;}
+        .m-table th,td{
+            border: 1px solid #ddd;
+            width: 100px;
+            height: 30px;
+            font: 16px/16px "微软雅黑";
+            text-align: center;
+        }
+        .m-table .table_head th {
+            background-color: #000;
+            color: #fff;
+            position: relative;
+        }
+        .m-table .table_head span {
+            position: absolute;
+            right: 10px;
+        }
+        .m-table .table_head span i:first-child {
+            display: block;
+            margin-bottom: 8px;
+            margin-top: -4px;
+            border-left: 4px solid transparent;
+            border-bottom: 8px solid #fff;
+            border-right: 4px solid transparent;
+        }
+        .m-table .table_head span i:last-child {
+            display: block;
+            margin-bottom: 5px;
+            border-left: 4px solid transparent;
+            border-top: 8px solid #fff;
+            border-right: 4px solid transparent;
+        }
+    </style>
 </head>
 <body>
-    <table>
-        <thead>
+    <table class="m-table">
+        <thead class="table_head">
             <tr>
                 <th>姓名</th>
-                <th>语文</th>
-                <th>数学</th>
-                <th>英语</th>
-                <th>总分</th>
+                <th>语文<span><i></i><i></i></span></th>
+                <th>数学<span><i></i><i></i></span></th>
+                <th>英语<span><i></i><i></i></span></th>
+                <th>总分<span><i></i><i></i></span></th>
             </tr>
         </thead>
-        <tbody>
-            <th>小明</th>
-            <th>80</th>
-            <th>90</th>
-            <th>70</th>
-            <th>240</th>
+        <tbody class="table_body">
+            <tr>
+                <td>小明</td>
+                <td>80</td>
+                <td>90</td>
+                <td>70</td>
+                <td>240</td>
+            </tr>
+            <tr>
+                <td>小红</td>
+                <td>90</td>
+                <td>60</td>
+                <td>90</td>
+                <td>240</td>
+            </tr>
+            <tr>
+                <td>小亮</td>
+                <td>60</td>
+                <td>100</td>
+                <td>70</td>
+                <td>230</td>
+            </tr>
         </tbody>
     </table>
+
+    <script type="text/javascript" src="table.js"></script>
+    <script type="text/javascript">
+        // 定义公共接口
+        var table = new Table({
+            // 1.表格数据
+            data: {
+                ["姓名","语文","数学","英语","总分"], /* 第一行为表头 */
+                ["小明","80","90","70","240"]
+            }
+            // 2.排序项
+            order: ["语文","数学","英语","总分"]
+        });
+
+        // 一个接口
+        // create();
+    </script>
 </body>
 </html>
