@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>百度前端技术学院——练习demo</title>
+    <style type="text/css">
+        html,body {
+            width:100%;
+            height:100%;
+            margin:0;
+            padding:0;
+            font: bold 24px/24px "微软雅黑";
+        }
+        a {
+            text-decoration:none;
+            color:#fff;
+        }
+        a:hover{
+            text-decoration: underline;
+        }
+        header,footer{
+            color:#fff;
+            background-color:black;
+        }
+        header{
+            height:60px; 
+            line-height:60px;
+        }
+        footer{
+            height:50px;
+            text-align:center;
+            line-height:50px;
+        }
+        content{
+            flex:1;
+            display: flex;
+            flex-flow: column;
+        }
+        .stage{
+            width: 100%;
+            margin: 10px;
+            overflow:auto;
+        }
+        .task {
+            display: table-cell;
+            max-width:350px;
+            min-height:50px;
+            padding: 5px;
+            margin: 10px;
+            border:1px solid black;
+        }
+        .task:hover{
+            background-color:#8fddf7;
+        }
+        .task:hover .title{
+            color:#12f;
+        }
+        .task a{
+            display: block;
+            color: #000;
+        }
+        .task .title{
+            font-size:18px;
+        }
+        .task .note{
+            margin-top: 5px;
+            font-size:12px;
+            color:#333;
+        }
+        .task h5{
+            margin:5px;
+        }
+        .task .show a{
+            display: inline-block;
+            font-size:15px;
+        }
+    </style>
+</head>
+<body>
+    <header>百度前端技术学院</header>
+    <content>
+        <div class="stage">
+            <h3>第一阶段</h3>
+            <div class="task">
+                <a class="title" href="task2/task1.html">任务一：零基础HTML编码</a>
+                <a class="note" href="http://ife.baidu.com/task/detail?taskId=1">任务说明：完成示例图HTML编写</a>
+            </div>
+            <div class="task">
+                <a class="title" href="task2.html">任务二：零基础HTML及CSS编码（一）</a>
+                <a class="note" href="http://ife.baidu.com/task/detail?taskId=2">任务说明：完成示例图的HTML，CSS代码编写</a>
+            </div>
+            <br/>
+            <div class="task">
+                <h5>任务三：三栏式布局</h5>
+                <div class="show">
+                    <a class="title" href="task3/task3-flex.html">flex实现</a>
+                    <a class="title" href="task3/task3-float.html">float实现</a>
+                    <a class="title" href="task3/task3-margin.html">margin实现</a>
+                    <a class="title" href="task3/task3-position.html">position实现</a>
+                </div>
+                <a class="note" href="http://ife.baidu.com/task/detail?taskId=3">任务说明：左右两栏宽度固定，中间一栏根据父元素宽度填充满</a>
+            </div>
+            <div class="task">
+                <h5>任务四：定位和居中问题</h5>
+                <div class="show">
+                    <a class="title" href="task4/task4-fixed.html">fiexd实现</a>
+                    <a class="title" href="task4/task4-flex.html">flex实现</a>
+                    <a class="title" href="task4/task4-table.html">table实现</a>
+                </div>
+                <a class="note" href="http://ife.baidu.com/task/detail?taskId=4">任务说明：灰色元素水平垂直居中，有两个四分之一圆位于其左上角和右下角。</a>
+            </div>
+        </div>
+        <div class="stage">
+            <h3>第二阶段</h3>
+            <div class="task">
+                <a class="title" href="task13.html">任务十三：零基础JavaScript编码（一）</a>
+                <a class="note" href="http://ife.baidu.com/task/detail?taskId=13">任务说明：用户可以在输入框中输入任何内容，点击“确认填写”按钮后，用户输入的内容会显示在“您输入的值是”文字的右边</a>
+            </div>
+            <div class="task">
+                <a class="title" href="task14.html">任务十四：零基础JavaScript编码（二）</a>
+                <a class="note" href="http://ife.baidu.com/task/detail?taskId=14">任务说明：页面加载后，将提供的空气质量数据数组，按照某种逻辑（比如空气质量大于60）进行过滤筛选，最后将符合条件的数据按照一定的格式要求显示在网页上</a>
+            </div>
+            <div class="task">
+                <a class="title" href="task15.html">任务十五：零基础JavaScript编码（三）</a>
+                <a class="note" href="http://ife.baidu.com/task/detail?taskId=15">任务说明：取页面上已有的source列表，从中提取出城市以及对应的空气质量;将数据按照某种顺序排序后，在resort列表中按照顺序显示出来</a>
+            </div>
+            <div class="task">
+                <a class="title" href="task16/task16.html">任务十六：零基础JavaScript编码（四）</a>
+                <a class="note" href="http://ife.baidu.com/task/detail?taskId=16">任务说明：用户输入城市名称和空气质量指数后，点击“确认添加”按钮后，就会将用户的输入在进行验证后，添加到下面的表格中，新增一行进行显示</a>
+            </div>
+            <div class="task">
+                <a class="title" href="task17/task17.html">任务十七：零基础JavaScript编码（五）</a>
+                <a class="note" href="http://ife.baidu.com/task/detail?taskId=17">任务说明：用户可以选择查看不同的时间粒度，以选择要查看的空气质量指数是以天为粒度还是以周或月为粒度</a>
+            </div>
+            <div class="task">
+                <a class="title" href="task18/task18.html">任务十八：基础JavaScript练习（一）</a>
+                <a class="note" href="http://ife.baidu.com/task/detail?taskId=18">任务说明：模拟一个队列</a>
+            </div>
+            <div class="task">
+                <a class="title" href="task19/task19.html">任务十九：基础JavaScript练习（二）（三）</a>
+                <a class="note" href="http://ife.baidu.com/task/detail?taskId=19">任务说明：简单的排序功能，如冒泡排序（不限制具体算法），用可视化的方法表达出来</a>
+            </div>
+            <div class="task">
+                <a class="title" href="task20/task20.html">任务二十：基础JavaScript练习（三）</a>
+                <a class="note" href="http://ife.baidu.com/task/detail?taskId=20">任务说明：基于任务18进行升级</a>
+            </div>
+            <div class="task">
+                <a class="title" href="task21/task21.html">任务二十一：基础JavaScript练习（四）</a>
+                <a class="note" href="http://ife.baidu.com/task/detail?taskId=21">任务说明：将任务20的代码进行抽象、封装，然后在此基础上实现如图中的两个需求：Tag输入和兴趣爱好输入</a>
+            </div>
+            <div class="task">
+                <a class="title" href="task22/task22.html">任务二十二：JavaScript和树（一）</a>
+                <a class="note" href="http://ife.baidu.com/task/detail?taskId=22">任务说明：展现一颗二叉树的结构</a>
+            </div>
+            <div class="task">
+                <a class="title" href="task23/task23.html">任务二十三：JavaScript和树（二）</a>
+                <a class="note" href="http://ife.baidu.com/task/detail?taskId=23">任务说明：将二叉树变成了多叉树，并且每一个节点中带有内容</a>
+            </div>
+            <div class="task">
+                <a class="title" href="task24/task24.html">任务二十四：JavaScript和树（三）</a>
+                <a class="note" href="http://ife.baidu.com/task/detail?taskId=24">任务说明：基于任务23，添加节点的选择、增加与删除的功能</a>
+            </div>
+            <div class="task">
+                <a class="title" href="task24/task24.html">任务二十五：JavaScript和树（四）</a>
+                <a class="note" href="http://ife.baidu.com/task/detail?taskId=25">任务说明：基于任务24的基本代码，实现一个树形组件，可参考如图示例，样式自定义，不做限制</a>
+            </div>
+            <div class="task">
+                <a class="title" href="task29/task29.html">任务二十九：表单（一）单个表单项的检验</a>
+                <a class="note" href="http://ife.baidu.com/task/detail?taskId=29">任务说明：在页面中实现一个输入框与按钮，要求点击验证按钮后，对输入框中内容进行格式校验，并在其下方显示校验结果</a>
+            </div>
+            <div class="task">
+                <a class="title" href="task30/task30.html">任务三十：表单（二）多个表单项的动态校验</a>
+                <a class="note" href="http://ife.baidu.com/task/detail?taskId=30">任务说明：基于上一个任务（任务29），在页面中添加多个表单</a>
+            </div>
+            <div class="task">
+                <a class="title" href="task31/task31.html">任务三十一：表单（三）联动</a>
+                <a class="note" href="http://ife.baidu.com/task/detail?taskId=31">任务说明：在页面中完成两个单选框，切换单选框的不同选项时下方显示的表单随之切换。</a>
+            </div>
+            <!-- <div class="task">
+                <a class="title" href="task32/task32.html">任务三十二：表单（四）实现表单自动生成工厂</a>
+                <a class="note" href="http://ife.baidu.com/task/detail?taskId=32">实现以JavaScript对象的方式定义表单及验证规则</a>
+            </div> -->
+        </div>
+        <div class="stage">
+            <h3>第三阶段</h3>
+            <div class="task">
+                <a class="title" href="task37/task37.html">任务三十七：UI组件之浮出层</a>
+                <a class="note" href="http://ife.baidu.com/task/detail?taskId=37">任务说明：浮出层的UI组件实现，包含拖拽和缩放</a>
+            </div>
+        </div>
+    </content>
+    <footer>CONTACT：<a href="https://github.com/vivijind/ifeBaidu2016">github</a></footer>
+</body>
+</html>
